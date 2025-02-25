@@ -1,0 +1,59 @@
+body {
+    background-color: #f0f0f0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.content {
+    min-height: 70vh;
+}
+
+.form-layout {
+    max-width: 500px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+
+.update:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    background-color: darkgray;
+}
+
+.delete-article {
+    color: #141414;
+}
+
+.empty-list {
+    font-size: 1.5em;
+    color: gray;
+}
+
+.plan-title:after, .plan-descr:after, .plan-price:after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin: 20px auto 10px;
+    background-color: lightgray;
+}
+
+.bnt-form {
+    display: inline;
+}
+
+footer:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin: 20px auto;
+    background-color: lightgray;
+}
