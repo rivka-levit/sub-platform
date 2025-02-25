@@ -15,6 +15,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from django.contrib.messages import constants as message_constants
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -136,3 +138,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MESSAGE_TAGS = {
+    message_constants.DEBUG: '',
+    message_constants.ERROR: 'danger',
+}
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'

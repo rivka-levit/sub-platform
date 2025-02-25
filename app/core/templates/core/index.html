@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block menu %}
+  {% include 'core/includes/main_menu.html' %}
+{% endblock %}
+
+{% block content %}
+  <br>
+  <br>
+
+  <div class="text-center">
+
+  <h5> Edenthought.... Subscribe for the most informative articles on the net!  </h5>
+
+  <br>
+
+  <p> Browse through our extensive collection of carefully curated content. </p>
+
+    <br>
+
+    <a class="btn btn-success"
+       type="button"
+       href="{% url 'register' %}">
+      <i class="fa fa-angle-right" aria-hidden="true"></i> &nbsp; Get started today
+    </a>
+
+
+  </div>
+
+{% endblock %}
