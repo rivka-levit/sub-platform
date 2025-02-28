@@ -1,0 +1,19 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block menu %}
+  {% include 'core/includes/main_menu.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container bg-white shadow my-4 my-md-5 p-5 form-layout">
+  <h1>Registration</h1>
+
+  <form action="{% url 'register' %}" method="post" autocomplete="off" class="pt-2 mt-2 mt-md-4">
+    {% csrf_token %}
+    {{ register_form|crispy }}
+    <input type="submit" value="Register" class="btn btn-success mt-2 mt-md-4">
+  </form>
+</div>
+{% endblock %}
