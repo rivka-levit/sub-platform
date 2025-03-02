@@ -19,7 +19,7 @@
 
       {% if user.is_authenticated %}
 
-        <a class="btn btn-secondary navbar-btn" type="button"  href="#">
+        <a class="btn btn-secondary navbar-btn" type="button"  href="{% url 'logout' %}">
           Logout
         </a>
 

@@ -55,3 +55,10 @@ class LoginView(View):
 
         messages.error(request, 'Invalid username or password!')
         return redirect(request.META.get('HTTP_REFERER', reverse('login')))
+
+
+@login_required(login_url='login')
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'You have been logged out!')
+    return redirect('index')
