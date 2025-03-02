@@ -28,3 +28,30 @@ class RegisterView(View):
         messages.error(request, f'Invalid data has been provided: {form.errors}')
         return redirect(request.META.get('HTTP_REFERER', reverse('register')))
 
+
+class LoginView(View):
+    def get(self, request):  # noqa
+        form = AuthenticationForm()
+        context = {'login_form': form, 'title': 'Edenthought | Login'}
+        return render(request, 'account/login.html', context)
+
+    def post(self, request):  # noqa
+        form = AuthenticationForm(request, data=request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data.get('username')  # Username / Email
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+
+                # if user.is_writer:  # noqa
+                #     return redirect(reverse('writer:dashboard',
+                #                             kwargs={'writer_id': user.id}))
+                #
+                # return redirect(reverse('client:dashboard'))
+
+        messages.error(request, 'Invalid username or password!')
+        return redirect(request.META.get('HTTP_REFERER', reverse('login')))
