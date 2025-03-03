@@ -14,6 +14,8 @@
       <list>
         <option value="$MODULE_DIR$/app/core/templates" />
         <option value="$MODULE_DIR$/app/account/templates" />
+        <option value="$MODULE_DIR$/app/client/templates" />
+        <option value="$MODULE_DIR$/app/writer/templates" />
       </list>
     </option>
   </component>

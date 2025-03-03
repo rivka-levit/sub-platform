@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block menu %}
+  {% include 'client/includes/client_menu.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="container bg-white shadow mt-2 mt-md-4 p-5 form-layout text-center">
+    <h5>👋 Welcome, {{ user.first_name }}!</h5>
+  </div>
+
+{#  <div class="container bg-white shadow mt-2 mt-md-4 p-5 form-layout text-center">#}
+{#    <h5>Subscription status:</h5>#}
+{#    {% if sub_plan %}#}
+{#      <p class="pt-3 fw-bold">#}
+{#        {{ sub_plan.name|title }}#}
+{#        <a href="{% url 'account' %}#edit-subscription" class="fw-light">(edit)</a>#}
+{#      </p>#}
+{#    {% else %}#}
+{#      <p class="py-3">None</p>#}
+{#      <form action="{% url 'client:subscription-plans' %}" method="get">#}
+{#        <input type="submit"#}
+{#               value="Subscribe"#}
+{#               class="btn btn-success">#}
+{#      </form>#}
+{#    {% endif %}#}
+{#  </div>#}
+
+{% endblock %}

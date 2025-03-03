@@ -47,11 +47,11 @@ class LoginView(View):
                 login(request, user)
                 return redirect('index')
 
-                # if user.is_writer:  # noqa
-                #     return redirect(reverse('writer:dashboard',
-                #                             kwargs={'writer_id': user.id}))
-                #
-                # return redirect(reverse('client:dashboard'))
+                if user.is_writer:  # noqa
+                    return redirect(reverse('writer:dashboard',
+                                            kwargs={'writer_id': user.id}))
+
+                return redirect(reverse('client:dashboard'))
 
         messages.error(request, 'Invalid username or password!')
         return redirect(request.META.get('HTTP_REFERER', reverse('login')))
