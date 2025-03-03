@@ -45,7 +45,6 @@ class LoginView(View):
 
             if user is not None:
                 login(request, user)
-                return redirect('index')
 
                 if user.is_writer:  # noqa
                     return redirect(reverse('writer:dashboard',
