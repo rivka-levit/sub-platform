@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block menu %}
+  {% include 'writer/includes/writer_menu.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="container shadow form-layout my-4 my-md-5 p-5">
+
+    <h3 class="text-center">Create an article</h3>
+
+    <form action="{% url 'writer:create_article' user.id %}"
+          method="post"
+          autocomplete="off"
+          class="pt-2 mt-2 mt-md-4">
+      {% csrf_token %}
+      {{ article_form|crispy }}
+      <input type="submit" value="Create" class="btn btn-success mt-2 mt-md-4">
+    </form>
+
+  </div>
+
+{% endblock %}
