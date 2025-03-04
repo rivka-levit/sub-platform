@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 
-from account.forms import CreateUserForm
+from account.forms import CreateUserForm, UpdateUserForm
 
 
 class RegisterView(View):
@@ -61,3 +61,35 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out!')
     return redirect('index')
+
+
+class AccountView(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+
+    def get(self, request):  # noqa
+        form = UpdateUserForm(instance=request.user)
+        context = {'account_form': form, 'title': 'Edenthought | Account'}
+        return render(request, 'account/account.html', context)
+
+    def post(self, request):  # noqa
+        form = UpdateUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account has been updated successfully!')
+        else:
+            messages.error(request,
+                           f'Invalid data has been provided: {form.errors}')
+
+        return redirect('index')
+
+
+@login_required(login_url='login')
+def delete_account(request):
+    user = get_object_or_404(get_user_model(), id=request.user.id)
+
+    logout(request)
+    user.delete()
+    messages.success(request, 'Account has been deleted successfully!')
+
+    return redirect(reverse('index'))

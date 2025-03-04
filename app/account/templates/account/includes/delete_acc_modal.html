@@ -1,0 +1,17 @@
+<div class="modal fade" id="deleteAccountModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header justify-content-sm-between">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Account</h5>
+        <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your account?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <a type="button" class="btn btn-danger" href="{% url 'delete_account' %}">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
