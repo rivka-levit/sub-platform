@@ -13,7 +13,7 @@
   <li class="nav-item">
     <a class="btn btn-secondary navbar-btn"
        type="button"
-       href="#">  <!-- url 'writer:create_article' writer_id=user.id -->
+       href="{% url 'writer:create_article' writer_id=user.id %}">
 
       Create article
 
@@ -23,7 +23,7 @@
   <li class="nav-item">
     <a class="btn btn-secondary navbar-btn"
        type="button"
-       href="#"> <!-- url 'writer:my_articles' writer_id=user.id -->
+       href="{% url 'writer:my_articles' writer_id=user.id %}">
 
       My articles
 

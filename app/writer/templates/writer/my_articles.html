@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block menu %}
+  {% include 'writer/includes/writer_menu.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="container shadow bg-white my-4 my-md-5 pt-4 pb-3">
+
+    <h3 class="text-center">My Articles</h3>
+
+  </div>
+
+  {% if articles %}
+    {% for article in articles %}
+
+      <div class="container shadow bg-white my-3 my-md-4 p-4 form-layout">
+        <a href="#">  <!-- url 'client:article-detail' article.slug -->
+          <h3> {{ article.title }} </h3>
+
+          {% if article.is_premium %}
+            <h6>🪙 Premium article 🪙</h6>
+          {% endif %}
+
+          <br>
+          <div>{{ article.content|slice:"0:150" }} ...</div>
+
+          <br>
+          <div class="datetime">
+            {{ article.date_posted|date:"M j, Y" }} - {{ article.date_posted|time:"H:i:s" }}
+          </div>
+        </a>
+
+        <div class="update">
+          <div>
+            <a href="{% url 'writer:update_article' user.id article.slug %}">
+              ⚙️ Update article
+            </a>
+          </div>
+
+          <div class="delete-article">
+            <a type="button" data-toggle="modal" data-target="#deleteModalCenter">
+              🚫 Delete article
+            </a>
+          </div>
+        </div>
+
+        {% include 'writer/includes/delete_modal.html' %}
+
+      </div>
+
+    {% endfor %}
+  {% endif %}
+
+
+{% endblock %}
