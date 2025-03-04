@@ -173,3 +173,65 @@ def test_logout_success(client, sample_user):
     assert len(messages_received) == 1
     assert messages_received[0].level == 25
     assert messages_received[0].message == 'You have been logged out!'
+
+
+def test_update_account_get_correct_form(client, user_writer):
+    """Test update account get method provides correct form."""
+
+    client.force_login(user_writer)
+    r = client.get(reverse('account'))
+    page_body = str(r.content)
+
+    assert r.status_code == 200
+    assert 'csrf_token' in r.context
+    assert 'id="div_id_email"' in page_body
+    assert 'id="div_id_first_name"' in page_body
+    assert 'id="div_id_last_name"' in page_body
+    assert 'value="Update account"' in page_body
+
+
+def test_update_account_post_change_data(client, user_writer):
+    """Test update account successfully for writer."""
+
+    payload = {
+        'email': 'new_email@example.com',
+        'first_name': 'new_first_name',
+        'last_name': 'new_last_name'
+    }
+
+    client.force_login(user_writer)
+    r = client.post(
+        reverse('account'),
+        data=payload
+    )
+
+    assert r.status_code == 302
+    assert r['Location'] == reverse('index')
+    assert get_user(client) == user_writer
+
+    user_writer.refresh_from_db()
+
+    for k, v in payload.items():
+        assert getattr(user_writer, k) == v
+
+    messages_received = list(get_messages(r.wsgi_request))
+
+    assert len(messages_received) == 1
+    assert messages_received[0].level == 25
+    assert messages_received[0].message == ('Account has been updated '
+                                            'successfully!')
+
+
+def test_update_account_post_invalid_data_fails(client, user_writer):
+    """Test update account post method fails with invalid data."""
+
+    payload = {'email': ''}
+
+    client.force_login(user_writer)
+    r = client.post(reverse('account'), data=payload)
+    messages_received = list(get_messages(r.wsgi_request))
+
+    assert r.status_code == 302
+    assert len(messages_received) == 1
+    assert messages_received[0].level == 40
+    assert 'Invalid data has been provided:' in messages_received[0].message
