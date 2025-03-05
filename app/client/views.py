@@ -1,8 +1,10 @@
 from django.shortcuts import redirect, reverse
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from writer.models import Article
 
 
 class ClientDashboardView(LoginRequiredMixin, TemplateView):
@@ -33,4 +35,17 @@ class ClientDashboardView(LoginRequiredMixin, TemplateView):
 
         context['title'] = 'Edenthought | Dashboard'
 
+        return context
+
+
+class ArticleDetailView(LoginRequiredMixin, DetailView):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+
+    model = Article
+    template_name = 'client/article_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Edenthought | {self.get_object().title}'
         return context

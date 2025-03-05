@@ -5,5 +5,10 @@ from client import views
 app_name = 'client'
 
 urlpatterns = [
-path('dashboard/', views.ClientDashboardView.as_view(), name='dashboard'),
+    path('dashboard/', views.ClientDashboardView.as_view(), name='dashboard'),
+    path(
+        'article-detail/<slug:slug>/',
+        views.ArticleDetailView.as_view(),
+        name='article_detail'
+    ),
 ]

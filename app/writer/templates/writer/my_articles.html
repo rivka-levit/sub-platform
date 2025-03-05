@@ -18,7 +18,7 @@
     {% for article in articles %}
 
       <div class="container shadow bg-white my-3 my-md-4 p-4 form-layout">
-        <a href="#">  <!-- url 'client:article-detail' article.slug -->
+        <a href="{% url 'client:article_detail' article.slug %}">
           <h3> {{ article.title }} </h3>
 
           {% if article.is_premium %}

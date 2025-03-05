@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block menu %}
+  {% if user.is_writer%}
+    {% include 'writer/includes/writer_menu.html' %}
+  {% else %}
+    {% include 'client/includes/client_menu.html' %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <div class="container bg-white shadow my-2 my-md-4 p-5">
+    <h1 class="text-center">{{ article.title }}</h1>
+
+    {% if article.is_premium %}
+      <h6>🪙 Premium article 🪙</h6>
+    {% endif %}
+
+    <br>
+    <div>
+      {{ article.content }}
+    </div>
+    <br>
+    <div class="justify-content-end">
+
+        Author: {{ article.author.first_name }} {{ article.author.last_name }}
+        <br>
+        Published: {{ article.date_posted|date:"M j, Y" }} - {{ article.date_posted|time:"H:i:s" }}
+
+    </div>
+
+  {% if user.is_writer %}
+    <div class="update">
+      <div>
+        <a href="{% url 'writer:update_article' user.id article.slug %}">
+          ⚙️ Update article
+        </a>
+      </div>
+
+      <div class="delete-article">
+        <a type="button" data-toggle="modal" data-target="#deleteModalCenter">
+          🚫 Delete article
+        </a>
+      </div>
+
+      {% include 'writer/includes/delete_modal.html' %}
+    </div>
+
+  {% endif %}
+
+  </div>
+
+{% endblock %}
