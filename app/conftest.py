@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 from account.models import CustomUser
 
-# from writer.models import Article
+from writer.models import Article
 # from client.models import Subscription, SubscriptionPlan
 
 
@@ -59,25 +59,25 @@ def user():
     return _user_factory
 
 
-# @pytest.fixture
-# def article():
-#     """Fixture for creating a sample article and pass other parameters."""
-#
-#     payload = {
-#         'title': 'Sample Title of Sample Article',
-#         'content': 'Sample content',
-#     }
-#
-#     def _article_factory(writer, **kwargs):
-#         payload['author'] = writer
-#         if kwargs:
-#             payload.update(kwargs)
-#
-#         return Article.objects.create(**payload)
-#
-#     return _article_factory
-#
-#
+@pytest.fixture
+def article():
+    """Fixture for creating a sample article and pass other parameters."""
+
+    payload = {
+        'title': 'Sample Title of Sample Article',
+        'content': 'Sample content',
+    }
+
+    def _article_factory(writer, **kwargs):
+        payload['author'] = writer
+        if kwargs:
+            payload.update(kwargs)
+
+        return Article.objects.create(**payload)
+
+    return _article_factory
+
+
 # @pytest.fixture
 # def subscription():
 #     """Fixture to create a sample subscription and pass other parameters."""
