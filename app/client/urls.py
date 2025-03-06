@@ -11,4 +11,8 @@ urlpatterns = [
         views.ArticleDetailView.as_view(),
         name='article_detail'
     ),
+    path(
+        'browse-articles/',
+        views.BrowseArticlesView.as_view(),
+        name='browse_articles'),
 ]

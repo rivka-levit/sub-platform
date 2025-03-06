@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block menu %}
+  {% include 'client/includes/client_menu.html' %}
+{% endblock %}
+
+{% block content %}
+
+  {% if articles %}
+
+    <div class="container shadow bg-white my-4 my-md-5 pt-4 pb-3">
+      <h3 class="text-center">Articles</h3>
+    </div>
+
+    {% for article in articles %}
+
+        <div class="container shadow bg-white my-3 my-md-4 p-4 form-layout">
+          <a href="{% url 'client:article_detail' article.slug %}">
+            <div>
+              <h3> {{ article.title }} </h3>
+
+              {% if article.is_premium %}
+                <h6>🪙 Premium article 🪙</h6>
+              {% endif %}
+
+              <br>
+              <p>{{ article.content|slice:"0:150" }}...</p>
+
+              <br>
+              <div class="datetime">
+                {{ article.date_posted|date:"M j, Y" }} - {{ article.date_posted|time:"H:i:s" }}
+              </div>
+            </div>
+          </a>
+        </div>
+
+    {% endfor %}
+
+{#  {% else %}#}
+{##}
+{#    <div class="container text-center my-4 my-md-5">#}
+{#      <div class="empty-list">#}
+{#        You have no active subscription plan yet. <br>#}
+{#        Please, subscribe to browse through your articles!#}
+{#      </div>#}
+{#      <a href="{% url 'client:subscription-plans' %}"#}
+{#         class="btn btn-success mt-5"#}
+{#         type="button">#}
+{#        Get subscription plan#}
+{#      </a>#}
+{#    </div>#}
+
+  {% endif %}
+
+{% endblock %}
