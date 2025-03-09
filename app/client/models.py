@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 
 class SubscriptionPlan(models.Model):
-    paypal_plan_id = models.CharField(max_length=255, unique=True, default="")
+    paypal_plan_id = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, unique=True)
     cost = models.DecimalField(decimal_places=2, max_digits=5)
     description = models.TextField(null=True, blank=True)

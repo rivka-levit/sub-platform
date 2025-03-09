@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from account.models import CustomUser
 
 from writer.models import Article
-# from client.models import Subscription, SubscriptionPlan
+from client.models import Subscription, SubscriptionPlan
 
 
 @pytest.fixture
@@ -78,50 +78,52 @@ def article():
     return _article_factory
 
 
-# @pytest.fixture
-# def subscription():
-#     """Fixture to create a sample subscription and pass other parameters."""
-#
-#     data = {
-#         'subscriber_name': 'Sample Subscriber Name',
-#         'paypal_subscription_id': 'sdf48ds0fbv3',
-#         'is_active': True,
-#     }
-#
-#     def _subscription_factory(
-#             user: get_user_model(),
-#             plan: SubscriptionPlan,
-#             **kwargs
-#     ):
-#         if kwargs:
-#             data.update(kwargs)
-#
-#         return Subscription.objects.create(user=user, subscription_plan=plan, **data)
-#
-#     return _subscription_factory
-#
-#
-# @pytest.fixture
-# def standard():
-#     """Create standard subscription plan."""
-#
-#     data = {
-#         'name': 'standard',
-#         'cost': 4.90,
-#         'description': 'Limited access'
-#     }
-#
-#     return SubscriptionPlan.objects.create(**data)
-#
-#
-# @pytest.fixture
-# def premium():
-#     """Create premium subscription plan."""
-#
-#     data = {
-#         'name': 'premium',
-#         'cost': 9.90,
-#         'description': 'Full access'
-#     }
-#
-#     return SubscriptionPlan.objects.create(**data)
+@pytest.fixture
+def subscription():
+    """Fixture to create a sample subscription and pass other parameters."""
+
+    data = {
+        'subscriber_name': 'Sample Subscriber Name',
+        'paypal_subscription_id': 'sdf48ds0fbv3',
+        'is_active': True,
+    }
+
+    def _subscription_factory(
+            user: get_user_model(),
+            plan: SubscriptionPlan,
+            **kwargs
+    ):
+        if kwargs:
+            data.update(kwargs)
+
+        return Subscription.objects.create(user=user, subscription_plan=plan, **data)
+
+    return _subscription_factory
+
+
+@pytest.fixture
+def standard():
+    """Create standard subscription plan."""
+
+    data = {
+        'paypal_plan_id': 'ST-935868202KH3945Q',
+        'name': 'standard',
+        'cost': 4.90,
+        'description': 'Limited access'
+    }
+
+    return SubscriptionPlan.objects.create(**data)
+
+
+@pytest.fixture
+def premium():
+    """Create premium subscription plan."""
+
+    data = {
+        'paypal_plan_id': 'PR-1950RTB994dkW99',
+        'name': 'premium',
+        'cost': 9.90,
+        'description': 'Full access'
+    }
+
+    return SubscriptionPlan.objects.create(**data)
