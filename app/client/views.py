@@ -72,3 +72,15 @@ class BrowseArticlesView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Edenthought | Articles'
         return context
+
+
+class SubscriptionPlansView(LoginRequiredMixin, TemplateView):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+
+    template_name = 'client/subscription_plans.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edenthought | Subscription Plans'
+        return context

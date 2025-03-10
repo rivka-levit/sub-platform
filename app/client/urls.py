@@ -15,4 +15,9 @@ urlpatterns = [
         'browse-articles/',
         views.BrowseArticlesView.as_view(),
         name='browse_articles'),
+    path(
+        'subscription-plans/',
+        views.SubscriptionPlansView.as_view(),
+        name='subscription_plans'
+    ),
 ]
