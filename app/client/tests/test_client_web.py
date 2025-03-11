@@ -59,3 +59,50 @@ def test_article_detail_get_success(client, sample_user, user_writer, article):
     assert payload['title'] in r.context['title']
     assert payload['title'] in page_content
     assert a.content in page_content
+
+
+def test_sub_plans_page_renders_correct_template(client, sample_user):
+    """Test subscription plan page renders correct template with
+    the information about subscription plans."""
+
+    client.force_login(sample_user)
+    r = client.get(reverse('client:subscription_plans'))
+    page_content = r.content.decode('utf-8')
+
+    assert r.status_code == 200
+    assert 'Standard subscription' in page_content
+    assert 'Premium subscription' in page_content
+    assert 'id="paypal-button-container-P-9EN41519BU401782AM7HQXXI"' in page_content
+    assert 'id="paypal-button-container-P-2JB54269VP863135RM7HQZFY"' in page_content
+
+
+@pytest.mark.parametrize(
+    'sub_plan,output_expected',
+    [('standard', 'Standard'), ('premium', 'Premium')]
+)
+def test_sub_plan_output_on_client_dashboard(
+        sub_plan, output_expected, client, sample_user, subscription, request
+):
+    """Test subscription plan output on client dashboard successfully."""
+
+    subscription(user=sample_user, plan=request.getfixturevalue(sub_plan))
+
+    client.force_login(sample_user)
+    r = client.get(reverse('client:dashboard'))
+    body = r.content.decode('utf-8')
+
+    assert r.status_code == 200
+    assert 'sub_plan' in r.context
+    assert output_expected in body
+
+
+def test_none_sub_plan_output_none(client, sample_user):
+    """Test client dashboard without subscription None subscription plan."""
+
+    client.force_login(sample_user)
+    r = client.get(reverse('client:dashboard'))
+    body = r.content.decode('utf-8')
+
+    assert r.status_code == 200
+    assert 'sub_plan' not in r.context
+    assert 'None' in body

@@ -5,6 +5,7 @@ from django.views.generic import TemplateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from writer.models import Article
+from client.models import Subscription
 
 
 class ClientDashboardView(LoginRequiredMixin, TemplateView):
@@ -25,13 +26,13 @@ class ClientDashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # subscriptions = Subscription.objects.filter(
-        #     user=self.request.user,
-        #     is_active=True
-        # ).order_by('-id')
-        #
-        # if subscriptions.exists():
-        #     context['sub_plan'] = subscriptions[0].subscription_plan
+        subscriptions = Subscription.objects.filter(
+            user=self.request.user,
+            is_active=True
+        ).order_by('-id')
+
+        if subscriptions.exists():
+            context['sub_plan'] = subscriptions[0].subscription_plan
 
         context['title'] = 'Edenthought | Dashboard'
 
@@ -60,13 +61,13 @@ class BrowseArticlesView(LoginRequiredMixin, ListView):
     queryset = Article.objects.all().order_by('-date_posted')
     context_object_name = 'articles'
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     if not hasattr(user, 'subscription') or not user.subscription:  # noqa
-    #         return None
-    #     if user.subscription.subscription_plan.name == 'standard':  # noqa
-    #         return self.queryset.filter(is_premium=False)
-    #     return self.queryset
+    def get_queryset(self):
+        user = self.request.user
+        if not hasattr(user, 'subscription') or not user.subscription:  # noqa
+            return None
+        if user.subscription.subscription_plan.name == 'standard':  # noqa
+            return self.queryset.filter(is_premium=False)
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
