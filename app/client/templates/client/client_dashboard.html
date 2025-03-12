@@ -16,7 +16,7 @@
     {% if sub_plan %}
       <p class="pt-3 fw-bold">
         {{ sub_plan.name|title }}
-        <a href="{% url 'account' %}" class="fw-light">(edit)</a>  <!-- #edit-subscription -->
+        <a href="{% url 'account' %}#edit-subscription" class="fw-light">(edit)</a>
       </p>
     {% else %}
       <p class="py-3">None</p>
