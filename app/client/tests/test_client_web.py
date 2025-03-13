@@ -10,6 +10,8 @@ from django.contrib.messages import get_messages
 
 from unittest.mock import patch, MagicMock
 
+from client.models import Subscription
+
 pytestmark = pytest.mark.django_db
 
 
@@ -106,3 +108,40 @@ def test_none_sub_plan_output_none(client, sample_user):
     assert r.status_code == 200
     assert 'sub_plan' not in r.context
     assert 'None' in body
+
+
+@pytest.mark.parametrize('sub_plan', ['standard', 'premium'])
+def test_create_subscription_success(
+        sub_plan, client, sample_user, request
+):
+    """Test creating subscription via web page successfully."""
+
+    sub_id = 'I-FF857850J03'
+    plan = request.getfixturevalue(sub_plan)
+
+    client.force_login(sample_user)
+    r = client.get('%s?subID=%s&plan=%s' % (reverse('client:create_subscription'), sub_id, plan.name))
+    sbn = Subscription.objects.filter(user=sample_user, subscription_plan=plan)
+
+    assert r.status_code == 302
+    assert r['Location'] == reverse('client:dashboard')
+    assert sbn.exists()
+    assert len(sbn) == 1
+
+
+def test_duplicated_create_subscription_fails(client, sample_user, standard, premium, subscription):
+    """Test creating duplicated subscription fails."""
+
+    subscription(user=sample_user, plan=standard)
+    sub_id = 'I-FF84TRR0J08'
+
+    client.force_login(sample_user)
+    r = client.get('%s?subID=%s&plan=%s' % (reverse('client:create_subscription'),
+                                            sub_id,
+                                            premium.name))
+    message_received = list(get_messages(r.wsgi_request))
+
+    assert r.status_code == 302
+    assert len(message_received) == 1
+    assert message_received[0].level == 40
+    assert 'Subscription not created!' in message_received[0].message

@@ -1,11 +1,13 @@
-from django.shortcuts import redirect, reverse
+from django.db import IntegrityError
+from django.shortcuts import redirect, reverse, get_object_or_404
 
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic import TemplateView, DetailView, ListView, RedirectView
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from writer.models import Article
-from client.models import Subscription
+from client.models import Subscription, SubscriptionPlan
 
 
 class ClientDashboardView(LoginRequiredMixin, TemplateView):
@@ -85,3 +87,35 @@ class SubscriptionPlansView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Edenthought | Subscription Plans'
         return context
+
+
+class CreateSubscriptionView(LoginRequiredMixin, RedirectView):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+    pattern_name = 'client:dashboard'
+
+    def get_redirect_url(self, *args, **kwargs):
+        user = self.request.user
+        sub_id = self.request.GET.get('subID')
+        plan_name = self.request.GET.get('plan')
+        plan = get_object_or_404(SubscriptionPlan, name=plan_name)
+
+        try:
+            Subscription.objects.create(
+                user=user,
+                subscriber_name=user.full_name(),  # noqa
+                subscription_plan=plan,
+                paypal_subscription_id=sub_id,
+                is_active=True
+            )
+            messages.success(self.request, 'Subscription created successfully!')
+
+        except IntegrityError:
+            messages.error(
+                self.request,
+                'Subscription not created! Invalid data has been submitted.'
+            )
+        except Exception as e:
+            messages.error(self.request, f'Something went wrong!\n{e}')
+
+        return super().get_redirect_url(*args, **kwargs)

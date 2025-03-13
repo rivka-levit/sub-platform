@@ -20,4 +20,8 @@ urlpatterns = [
         views.SubscriptionPlansView.as_view(),
         name='subscription_plans'
     ),
+    path(
+        'create-subscription/',
+        views.CreateSubscriptionView.as_view(),
+        name='create_subscription'),
 ]
