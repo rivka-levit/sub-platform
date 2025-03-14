@@ -145,3 +145,27 @@ def test_duplicated_create_subscription_fails(client, sample_user, standard, pre
     assert len(message_received) == 1
     assert message_received[0].level == 40
     assert 'Subscription not created!' in message_received[0].message
+
+
+def test_delete_subscription_view_renders_correct_template(
+        client,
+        sample_user,
+        subscription,
+        standard
+):
+    """Test delete subscription view renders correct template
+    when subscription is not deleted."""
+
+    sbn = subscription(user=sample_user, plan=standard)
+    client.force_login(sample_user)
+
+    r = client.get(reverse(
+        'client:delete_subscription',
+        kwargs={'subID': sbn.paypal_subscription_id})
+    )
+
+    assert r.status_code == 200
+    assert 'Delete Subscription' in r.context['title']
+    assert 'is_deleted' in r.context
+    assert r.context['is_deleted'] is False
+    assert 'Something went wrong!' in r.content.decode('utf-8')
