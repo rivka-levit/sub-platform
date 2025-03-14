@@ -24,4 +24,9 @@ urlpatterns = [
         'create-subscription/',
         views.CreateSubscriptionView.as_view(),
         name='create_subscription'),
+    path(
+        'delete-subscription/<str:subID>/',
+        views.DeleteSubscriptionView.as_view(),
+        name='delete_subscription'
+    ),
 ]

@@ -1,4 +1,10 @@
-<div class="modal fade" id="deleteSubModal" tabindex="-1" role="dialog" aria-labelledby="deleteSubModalTitle" aria-hidden="true">
+<div class="modal fade"
+     id="deleteSubModal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="deleteSubModalTitle"
+     aria-hidden="true">
+
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header justify-content-sm-between">
@@ -11,8 +17,13 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <a type="button" class="btn btn-danger" href="#">Delete</a>  <!-- url 'client:delete-subscription' subID=user.subscription.paypal_subscription_id -->
+        <a type="button"
+           class="btn btn-danger"
+           href="{% url 'client:delete_subscription' subID=user.subscription.paypal_subscription_id %}">
+          Delete
+        </a>
       </div>
     </div>
   </div>
+
 </div>
