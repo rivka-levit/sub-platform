@@ -19,6 +19,8 @@ services:
       SECRET_KEY: ${DJANGO_SECRET_KEY}
       ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
       DEBUG: ${DEBUG}
+      PAYPAL_CLIENT_ID: ${PAYPAL_CLIENT_ID}
+      PAYPAL_SECRET_ID: ${PAYPAL_SECRET_ID}
     depends_on:
       - db
 
