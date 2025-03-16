@@ -13,7 +13,9 @@ from writer.models import Article
 
 from client.models import Subscription, SubscriptionPlan
 from client.exceptions import SubscriptionNotDeletedException
-from client.paypal import get_access_token, cancel_subscription_paypal
+from client.paypal import (get_access_token,
+                           cancel_subscription_paypal,
+                           update_subscription_paypal)
 
 
 class ClientDashboardView(LoginRequiredMixin, TemplateView):
@@ -169,3 +171,32 @@ class DeleteSubscriptionView(TemplateView):
             context['is_deleted'] = True
 
         return context
+
+
+class UpdateSubscriptionView(LoginRequiredMixin, RedirectView):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+    pattern_name = 'account'
+
+    def dispatch(self, request, *args, **kwargs):
+        sub_id = self.kwargs.get('subID')
+
+        return super().dispatch(
+            request,
+            sub_id,
+            *args,
+            **kwargs
+        )
+
+    def get_redirect_url(self, *args, **kwargs):
+        access_token = get_access_token()
+        approve_link = update_subscription_paypal(
+            access_token,
+            sub_id=self.kwargs.get('subID')
+        )
+        if approve_link:
+            messages.success(self.request, 'Subscription updated successfully!')
+            return redirect(approve_link)
+
+        messages.error(self.request, 'Something went wrong!')
+        return super().get_redirect_url(*args, **kwargs)
