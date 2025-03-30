@@ -200,3 +200,19 @@ class UpdateSubscriptionView(LoginRequiredMixin, RedirectView):
 
         messages.error(self.request, 'Something went wrong!')
         return super().get_redirect_url(*args, **kwargs)
+
+
+class PayPalSubConfirmedView(LoginRequiredMixin, TemplateView):
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
+    template_name = 'client/paypal_update_confirmed.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'PayPal Confirmed Subscription'
+
+        subscription = Subscription.objects.filter(user=self.request.user)
+        if subscription.exists():
+            context['subID'] = subscription[0].paypal_subscription_id
+
+        return context

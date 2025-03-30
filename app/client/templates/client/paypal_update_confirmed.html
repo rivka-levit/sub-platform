@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block menu %}
+  {% include 'client/includes/client_menu.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="container form-layout bg-white shadow text-center p-5 my-4 my-md-5">
+
+    <h5>PaPal update confirmed!</h5>
+    <br>
+    <h1>✅</h1>
+    <br>
+    <p>
+      Your request to update your subscription has been confirmed on PayPal!
+    </p>
+
+    <a class="btn btn-success mt-4 mt-md-5" href="#">  <!-- url 'client:django-subscription-confirmed' subID=subID -->
+      Confirm for final approval
+    </a>
+  </div>
+
+{% endblock %}

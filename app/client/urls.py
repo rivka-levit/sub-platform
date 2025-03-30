@@ -34,4 +34,9 @@ urlpatterns = [
         views.UpdateSubscriptionView.as_view(),
         name='update_subscription'
     ),
+    path(
+        'paypal-subscription-confirmed/',
+        views.PayPalSubConfirmedView.as_view(),
+        name='paypal_subscription_confirmed'
+    ),
 ]
