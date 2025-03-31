@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import logging
 
 from dotenv import load_dotenv
 
@@ -88,3 +89,25 @@ def update_subscription_paypal(access_token, sub_id):
                 approve_link = link['href']
 
     return approve_link
+
+
+def get_current_subscription_plan(access_token: str, sub_id: str) -> str | None:
+    """Make request to PayPal and return current subscription plan ID."""
+
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+    url = f'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{sub_id}'
+
+    r = requests.get(url, headers=headers)
+
+    if r.status_code == 200:
+        subscription_data = r.json()
+        current_plan_id = subscription_data.get('plan_id')
+
+        return current_plan_id
+
+    logging.info('Failed to retrieve subscription details')
+    return None
