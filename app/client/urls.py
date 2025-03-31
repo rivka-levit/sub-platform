@@ -39,4 +39,9 @@ urlpatterns = [
         views.PayPalSubConfirmedView.as_view(),
         name='paypal_subscription_confirmed'
     ),
+    path(
+        'django-subscription-confirmed/<str:subID>/',
+        views.DjangoSubConfirmedView.as_view(),
+        name='django_subscription_confirmed'
+    ),
 ]

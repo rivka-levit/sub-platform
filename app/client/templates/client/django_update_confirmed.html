@@ -9,16 +9,16 @@
 
   <div class="container form-layout bg-white shadow text-center p-5 my-4 my-md-5">
 
-    <h5>PaPal update confirmed!</h5>
+    <h5>Application approval confirmed!</h5>
     <br>
     <h1>✅</h1>
     <br>
     <p>
-      Your request to update your subscription has been confirmed on PayPal!
+      Your request to update your subscription has been confirmed on your account!
     </p>
 
-    <a class="btn btn-success mt-4 mt-md-5" href="{% url 'client:django_subscription_confirmed' subID=subID %}">
-      Confirm for final approval
+    <a class="btn btn-success mt-4 mt-md-5" href="{% url 'client:dashboard' %}">
+      Return to dashboard
     </a>
   </div>
 
