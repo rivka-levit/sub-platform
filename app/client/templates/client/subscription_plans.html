@@ -24,8 +24,20 @@
         <h2 class="plan-price my-4">$4.99</h2>
 
         <!-- PayPal buttons -->
+
+        {% if not user.subscription %}
         <div id="paypal-button-container-P-9EN41519BU401782AM7HQXXI"
              class="paypal-buttons pt-4"></div>
+        {% else %}
+          <form action="#" method="get" class="bnt-form">
+            <input type="button"
+                   value="Update current subscription"
+                   data-toggle="modal"
+                   data-target="#updateSubModal"
+                   class="btn btn-info">
+            {% include 'client/includes/update_sub_modal.html' %}
+          </form>
+        {% endif %}
       </div>
 
       <div class="form-layout bg-white shadow p-5 m-3 text-center">
@@ -37,8 +49,20 @@
         <h2 class="plan-price my-4">$9.99</h2>
 
         <!-- PayPal buttons -->
-        <div id="paypal-button-container-P-2JB54269VP863135RM7HQZFY"
-             class="paypal-buttons pt-4"></div>
+
+        {% if not user.subscription %}
+          <div id="paypal-button-container-P-2JB54269VP863135RM7HQZFY"
+               class="paypal-buttons pt-4"></div>
+        {% else %}
+          <form action="#" method="get" class="bnt-form">
+            <input type="button"
+                   value="Update current subscription"
+                   data-toggle="modal"
+                   data-target="#updateSubModal"
+                   class="btn btn-info">
+            {% include 'client/includes/update_sub_modal.html' %}
+          </form>
+        {% endif %}
       </div>
 
     </div>
