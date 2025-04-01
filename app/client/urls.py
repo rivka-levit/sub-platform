@@ -30,7 +30,7 @@ urlpatterns = [
         name='delete_subscription'
     ),
     path(
-        'update-subscription/<str:subID>/',
+        'update-subscription/<str:sub_id>/',
         views.UpdateSubscriptionView.as_view(),
         name='update_subscription'
     ),

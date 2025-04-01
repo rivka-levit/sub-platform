@@ -174,17 +174,19 @@ class DeleteSubscriptionView(TemplateView):
         return context
 
 
-class UpdateSubscriptionView(LoginRequiredMixin, RedirectView):
+class UpdateSubscriptionView(RedirectView):
     login_url = 'login'
     redirect_field_name = 'redirect_to'
     pattern_name = 'account'
 
+    @method_decorator(login_required(
+        login_url='login',
+        redirect_field_name='redirect_to'
+    ))
     def dispatch(self, request, *args, **kwargs):
-        sub_id = self.kwargs.get('subID')
-
-        return super().dispatch(
+        return super(UpdateSubscriptionView, self).dispatch(
             request,
-            sub_id,
+            self.kwargs['sub_id'],
             *args,
             **kwargs
         )
@@ -193,11 +195,11 @@ class UpdateSubscriptionView(LoginRequiredMixin, RedirectView):
         access_token = get_access_token()
         approve_link = update_subscription_paypal(
             access_token,
-            sub_id=self.kwargs.get('subID')
+            sub_id=self.kwargs.get('sub_id', None)
         )
         if approve_link:
             messages.success(self.request, 'Subscription updated successfully!')
-            return redirect(approve_link)
+            return approve_link
 
         messages.error(self.request, 'Something went wrong!')
         return super().get_redirect_url(*args, **kwargs)
