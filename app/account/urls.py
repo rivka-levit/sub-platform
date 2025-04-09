@@ -1,3 +1,7 @@
+"""
+URL configuration for account app.
+"""
+
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
@@ -15,28 +19,28 @@ urlpatterns = [
     # Enter email to receive password reset link
     path(
         'reset-password/',
-        auth_views.PasswordResetView.as_view(),
+        auth_views.PasswordResetView.as_view(template_name='account/password_reset.html',),
         name='reset_password'
     ),
 
     # Email sent successfully page
     path(
         'reset-password/sent/',
-        auth_views.PasswordResetDoneView.as_view(),
+        auth_views.PasswordResetDoneView.as_view(template_name='account/password_reset_sent.html'),
         name='password_reset_done'
     ),
 
-    # Change password link
+    # Change password form link
     path(
         'reset-password/<uidb64>/<token>/',
-        auth_views.PasswordResetConfirmView.as_view(),
+        auth_views.PasswordResetConfirmView.as_view(template_name='account/password_reset_form.html'),
         name='password_reset_confirm'
     ),
 
     # Success page password has been changed
     path(
         'reset-password/complete/',
-        auth_views.PasswordResetCompleteView.as_view(),
+        auth_views.PasswordResetCompleteView.as_view(template_name='account/password_reset_complete.html'),
         name='password_reset_complete'
     ),
 ]
