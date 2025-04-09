@@ -8,11 +8,21 @@
 
 {% block content %}
   <div class="container bg-white shadow my-4 my-md-5 p-5 form-layout">
+
     <h1>Sign In</h1>
+
     <form action="{% url 'login' %}" method="post" autocomplete="off" class="pt-2 mt-2 mt-md-4">
       {% csrf_token %}
+
       {{ login_form|crispy }}
+
+      <div class="float-end">
+        <a href="{% url 'reset_password' %}">Forgotten password?</a>
+      </div>
+
       <input type="submit" value="Login" class="btn btn-success mt-2 mt-md-4">
+
     </form>
+
   </div>
 {% endblock %}
