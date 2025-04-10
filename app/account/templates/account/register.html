@@ -8,12 +8,16 @@
 
 {% block content %}
 <div class="container bg-white shadow my-4 my-md-5 p-5 form-layout">
-  <h1>Registration</h1>
+  <h1 class="u-header text-center">Registration</h1>
 
   <form action="{% url 'register' %}" method="post" autocomplete="off" class="pt-2 mt-2 mt-md-4">
     {% csrf_token %}
     {{ register_form|crispy }}
-    <input type="submit" value="Register" class="btn btn-success mt-2 mt-md-4">
+    <input type="submit" value="Register" class="btn btn-success w-100 mt-2 mt-md-4">
   </form>
+
+  <div class="text-center mt-3">
+    <a href="{% url 'login' %}">Already have an account?</a>
+  </div>
 </div>
 {% endblock %}
