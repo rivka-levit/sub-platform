@@ -8,7 +8,7 @@
 
 {% block content %}
 
-  <div class="container shadow form-layout my-4 my-md-5 p-5">
+  <div class="container shadow bg-white form-layout my-4 my-md-5 p-5">
 
     <h3 class="text-center">Update Article</h3>
 
@@ -18,7 +18,7 @@
           class="pt-2 mt-2 mt-md-4">
       {% csrf_token %}
       {{ article_form|crispy }}
-      <input type="submit" value="Update" class="btn btn-success mt-2 mt-md-4">
+      <input type="submit" value="Update" class="btn btn-success mt-2 mt-md-4 w-100">
     </form>
 
   </div>
