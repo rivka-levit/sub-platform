@@ -14,7 +14,7 @@ urlpatterns = [
     path('account/', views.AccountView.as_view(), name='account'),
     path('delete-account', views.delete_account, name='delete_account'),
 
-    # Password management
+    # ----------- Password management --------------
 
     # Enter email to receive password reset link
     path(
@@ -23,7 +23,7 @@ urlpatterns = [
         name='reset_password'
     ),
 
-    # Email sent successfully page
+    # Email sent success page
     path(
         'reset-password/sent/',
         auth_views.PasswordResetDoneView.as_view(template_name='account/password_reset_sent.html'),
@@ -42,5 +42,28 @@ urlpatterns = [
         'reset-password/complete/',
         auth_views.PasswordResetCompleteView.as_view(template_name='account/password_reset_complete.html'),
         name='password_reset_complete'
+    ),
+
+    # ------------- Email verification ----------------
+
+    path(
+        'email-verification/',
+        views.EmailVerificationView.as_view(),
+        name='email_verification'
+    ),
+    path(
+        'email-verification-sent/',
+        views.EmailVerificationSentView.as_view(),
+        name='email_verification_sent'
+    ),
+    path(
+        'email-verification-success/',
+        views.EmailVerificationSuccessView.as_view(),
+        name='email_verification_success'
+    ),
+    path(
+        'email-verification-failed/',
+        views.EmailVerificationFailedView.as_view(),
+        name='email_verification_failed'
     ),
 ]

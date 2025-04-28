@@ -93,3 +93,19 @@ def delete_account(request):
     messages.success(request, 'Account has been deleted successfully!')
 
     return redirect(reverse('index'))
+
+
+class EmailVerificationView(TemplateView):
+    template_name = 'account/email_verification.html'
+
+
+class EmailVerificationSentView(TemplateView):
+    template_name = 'account/email_verification_sent.html'
+
+
+class EmailVerificationSuccessView(TemplateView):
+    template_name = 'account/email_verification_success.html'
+
+
+class EmailVerificationFailedView(TemplateView):
+    template_name = 'account/email_verification_failed.html'
