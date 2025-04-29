@@ -8,3 +8,4 @@ psycopg2>=2.9.10,<3.0
 django-crispy-forms>=2.3,<2.4
 crispy-bootstrap5>=2024.10,<2024.11
 requests>=2.32.3,<2.33
+django-utils-six==2.0
