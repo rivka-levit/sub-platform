@@ -5,10 +5,17 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
 
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 
+from django.template.loader import render_to_string
+
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+
 from account.forms import CreateUserForm, UpdateUserForm
+from account.token import user_tokenizer_generate
 
 
 class RegisterView(View):
@@ -20,8 +27,12 @@ class RegisterView(View):
 
     def post(self, request): # noqa
         form = CreateUserForm(request.POST)
+
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user.is_active = False
+            user.save()
+
             messages.success(request, 'Account has been created successfully!')
             return redirect('login')
 
