@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, View
+from django.conf import settings
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -7,12 +7,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 
+from django.core.mail import send_mail
+
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 
 from django.template.loader import render_to_string
 
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+
+from django.views.generic import TemplateView, View
 
 from account.forms import CreateUserForm, UpdateUserForm
 from account.token import user_tokenizer_generate
@@ -32,6 +36,29 @@ class RegisterView(View):
             user = form.save()
             user.is_active = False
             user.save()
+
+            # Email verification config
+
+            current_site = get_current_site(request)
+            user_email = user.email
+            subject = 'Activate your Edenthought account.'
+
+            content = render_to_string(
+                'account/email_verification.html',
+                {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': user_tokenizer_generate.make_token(user)
+                }
+            )
+
+            send_mail(
+                subject=subject,
+                message=content,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[user_email]
+            )
 
             messages.success(request, 'Account has been created successfully!')
             return redirect('login')
