@@ -47,7 +47,7 @@ urlpatterns = [
     # ------------- Email verification ----------------
 
     path(
-        'email-verification/',
+        'email-verification/<str:uidb64>/<str:token>/',
         views.EmailVerificationView.as_view(),
         name='email_verification'
     ),

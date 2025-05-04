@@ -12,6 +12,8 @@ from django.contrib.messages import get_messages
 
 from account.forms import CreateUserForm
 
+from unittest.mock import patch, MagicMock
+
 pytestmark = pytest.mark.django_db
 
 
@@ -73,14 +75,13 @@ def test_register_post_create_user_success(client):
         'password1': 'test_pass123',
         'password2': 'test_pass123'
     }
+
     r = client.post(reverse('register'), data=payload)
     new_user = get_user_model().objects.filter(email=payload['email'])
-    messages_received = list(get_messages(r.wsgi_request))
 
     assert r.status_code == 302
     assert new_user.exists()
-    assert len(messages_received) == 1
-    assert messages_received[0].level == 25
+    assert new_user[0].is_active == False
 
 
 def test_register_post_invalid_fields_not_create_user(client):

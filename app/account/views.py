@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, RedirectView
 
 from account.forms import CreateUserForm, UpdateUserForm
 from account.token import user_tokenizer_generate
@@ -60,8 +60,7 @@ class RegisterView(View):
                 recipient_list=[user_email]
             )
 
-            messages.success(request, 'Account has been created successfully!')
-            return redirect('login')
+            return redirect('email_verification_sent')
 
         messages.error(request, f'Invalid data has been provided: {form.errors}')
         return redirect(request.META.get('HTTP_REFERER', reverse('register')))
@@ -133,8 +132,31 @@ def delete_account(request):
     return redirect(reverse('index'))
 
 
-class EmailVerificationView(TemplateView):
-    template_name = 'account/email_verification.html'
+class EmailVerificationView(RedirectView):
+
+    def dispatch(self, request, *args, **kwargs):
+        uidb64 = self.kwargs.get('uidb64')
+        token = self.kwargs.get('token')
+
+        return super(EmailVerificationView, self).dispatch(
+            request,
+            uidb64,
+            token,
+            *args,
+            **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        user_pk = force_str(urlsafe_base64_decode(self.kwargs.get('uidb64')))
+        user = get_user_model().objects.get(pk=user_pk)
+        token = self.kwargs.get('token')
+
+        if user and user_tokenizer_generate.check_token(user, token):
+            user.is_active = True
+            user.save()
+
+            return reverse('email_verification_success')
+
+        return reverse('email_verification_failed')
 
 
 class EmailVerificationSentView(TemplateView):

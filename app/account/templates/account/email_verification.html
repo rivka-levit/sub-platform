@@ -1,5 +1,12 @@
-{% extends 'core/base.html' %}
+{% autoescape off %}
 
-{% block content %}
+  Hi,
 
-{% endblock %}
+  Please click the link below to verify your email:
+
+  http://{{ domain }}{% url 'email_verification' uidb64=uid token=token %}
+
+  Best regards,
+  The Edenthought Team
+
+{% endautoescape %}
