@@ -236,3 +236,15 @@ def test_update_account_post_invalid_data_fails(client, user_writer):
     assert len(messages_received) == 1
     assert messages_received[0].level == 40
     assert 'Invalid data has been provided:' in messages_received[0].message
+
+
+def test_delete_account_success(client, sample_user):
+    """Test delete account successfully."""
+
+    user_id = sample_user.id  # noqa
+    client.force_login(sample_user)
+    r = client.get(reverse('delete_account'))
+
+    users = get_user_model().objects.filter(id=user_id)
+
+    assert not users.exists()
