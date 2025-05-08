@@ -2,6 +2,7 @@
 Tests for account web pages.
 Command: pytest account/tests --cov=account --cov-report term-missing:skip-covered
 """
+import os
 
 import pytest
 
@@ -69,19 +70,22 @@ def test_register_post_create_user_success(client):
     """Test post request with valid data creates a new user."""
 
     payload = {
-        'email': 'new_user@example.com',
+        'email': 'new_user@gmail.com',
         'first_name': 'First Name',
         'last_name': 'Last Name',
         'password1': 'test_pass123',
         'password2': 'test_pass123'
     }
 
-    r = client.post(reverse('register'), data=payload)
-    new_user = get_user_model().objects.filter(email=payload['email'])
+    with patch('account.views.send_mail') as mocked_send_mail:
+        r = client.post(reverse('register'), data=payload)
+        new_user = get_user_model().objects.filter(email=payload['email'])
 
-    assert r.status_code == 302
-    assert new_user.exists()
-    assert new_user[0].is_active == False
+        assert r.status_code == 302
+        assert new_user.exists()
+        assert new_user[0].is_active == False
+        assert mocked_send_mail.called == True
+        assert 'verification-sent' in r.url
 
 
 def test_register_post_invalid_fields_not_create_user(client):
@@ -241,10 +245,10 @@ def test_update_account_post_invalid_data_fails(client, user_writer):
 def test_delete_account_success(client, sample_user):
     """Test delete account successfully."""
 
-    user_id = sample_user.id  # noqa
+    user_pk = sample_user.pk  # noqa
     client.force_login(sample_user)
-    r = client.get(reverse('delete_account'))
+    client.get(reverse('delete_account'))
 
-    users = get_user_model().objects.filter(id=user_id)
+    users = get_user_model().objects.filter(pk=user_pk)
 
     assert not users.exists()
