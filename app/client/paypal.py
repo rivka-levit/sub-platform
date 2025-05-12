@@ -111,3 +111,23 @@ def get_current_subscription_plan(access_token: str, sub_id: str) -> str | None:
 
     logging.info('Failed to retrieve subscription details')
     return None
+
+
+def deactivate_subscription_paypal(access_token, sub_id):
+    """Deactivate subscription on PayPal side."""
+
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+
+    data = { 'reason': '' }
+
+    response = requests.post(
+        f'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{sub_id}/suspend',
+        headers=headers,
+        data=data
+    )
+
+    return response.status_code
