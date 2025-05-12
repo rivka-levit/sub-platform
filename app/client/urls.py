@@ -44,4 +44,8 @@ urlpatterns = [
         views.DjangoSubConfirmedView.as_view(),
         name='django_subscription_confirmed'
     ),
+    path('deactivate-subscription/<str:sub_id>/',
+         views.deactivate_subscription,
+         name='deactivate_subscription'
+    ),
 ]

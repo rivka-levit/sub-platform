@@ -16,7 +16,8 @@ from client.exceptions import SubscriptionNotDeletedException
 from client.paypal import (get_access_token,
                            cancel_subscription_paypal,
                            update_subscription_paypal,
-                           get_current_subscription_plan)
+                           get_current_subscription_plan,
+                           deactivate_subscription_paypal)
 
 
 class ClientDashboardView(LoginRequiredMixin, TemplateView):
@@ -271,3 +272,21 @@ class DjangoSubConfirmedView(TemplateView):
         context['subPlan'] = subscription.subscription_plan
 
         return context
+
+
+@login_required(
+    login_url='login',
+    redirect_field_name='redirect_to'
+)
+def deactivate_subscription(request, sub_id):
+    """Deactivate a subscription of a client."""
+
+    access_token = get_access_token()
+    status_code = deactivate_subscription_paypal(access_token, sub_id)
+
+    if status_code == 204:
+        messages.success(request, 'Subscription deactivated successfully!')
+        return redirect('client:dashboard')
+
+    messages.error(request, 'Something went wrong!')
+    return redirect(request.META.get('HTTP_REFERER', reverse('client:dashboard')))
