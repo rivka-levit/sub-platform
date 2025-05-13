@@ -122,10 +122,30 @@ def deactivate_subscription_paypal(access_token, sub_id):
         'Accept': 'application/json',
     }
 
-    data = { 'reason': '' }
+    data = { 'reason': 'Suspending the subscription' }
 
     response = requests.post(
         f'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{sub_id}/suspend',
+        headers=headers,
+        data=data
+    )
+
+    return response.status_code
+
+
+def activate_subscription_paypal(access_token, sub_id):
+    """Activate subscription on PayPal side."""
+
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+    }
+
+    data = '{ "reason": "Reactivating the subscription" }'
+
+    response = requests.post(
+        f'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{sub_id}/activate',
         headers=headers,
         data=data
     )
