@@ -122,13 +122,10 @@ def deactivate_subscription_paypal(access_token, sub_id):
         'Accept': 'application/json',
     }
 
-    data = { 'reason': 'Suspending the subscription' }
+    data = '{"reason": "Suspending the subscription"}'
+    url = f'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{sub_id}/suspend'
 
-    response = requests.post(
-        f'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{sub_id}/suspend',
-        headers=headers,
-        data=data
-    )
+    response = requests.post(url, headers=headers, data=data)
 
     return response.status_code
 

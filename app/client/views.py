@@ -40,7 +40,7 @@ class ClientDashboardView(LoginRequiredMixin, TemplateView):
 
         subscriptions = Subscription.objects.filter(
             user=self.request.user,
-            is_active=True
+            # is_active=True
         ).order_by('-id')
 
         if subscriptions.exists():
@@ -285,6 +285,13 @@ def deactivate_subscription(request, sub_id):
     status_code = deactivate_subscription_paypal(access_token, sub_id)
 
     if status_code == 204:
+        subscription = get_object_or_404(
+            Subscription,
+            paypal_subscription_id=sub_id
+        )
+        subscription.is_active = False
+        subscription.save()
+
         messages.success(request, 'Subscription deactivated successfully!')
         return redirect('client:dashboard')
 
