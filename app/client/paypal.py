@@ -140,11 +140,8 @@ def activate_subscription_paypal(access_token, sub_id):
     }
 
     data = '{ "reason": "Reactivating the subscription" }'
+    url = f'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{sub_id}/activate'
 
-    response = requests.post(
-        f'https://api-m.sandbox.paypal.com/v1/billing/subscriptions/{sub_id}/activate',
-        headers=headers,
-        data=data
-    )
+    response = requests.post(url, headers=headers, data=data)
 
     return response.status_code

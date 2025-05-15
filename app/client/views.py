@@ -17,7 +17,8 @@ from client.paypal import (get_access_token,
                            cancel_subscription_paypal,
                            update_subscription_paypal,
                            get_current_subscription_plan,
-                           deactivate_subscription_paypal)
+                           deactivate_subscription_paypal,
+                           activate_subscription_paypal)
 
 
 class ClientDashboardView(LoginRequiredMixin, TemplateView):
@@ -293,6 +294,31 @@ def deactivate_subscription(request, sub_id):
         subscription.save()
 
         messages.success(request, 'Subscription deactivated successfully!')
+        return redirect('client:dashboard')
+
+    messages.error(request, 'Something went wrong!')
+    return redirect(request.META.get('HTTP_REFERER', reverse('client:dashboard')))
+
+
+@login_required(
+    login_url='login',
+    redirect_field_name='redirect_to'
+)
+def activate_subscription(request, sub_id):
+    """Activate a subscription of a client."""
+
+    access_token = get_access_token()
+    status_code = activate_subscription_paypal(access_token, sub_id)
+
+    if status_code == 204:
+        subscription = get_object_or_404(
+            Subscription,
+            paypal_subscription_id=sub_id
+        )
+        subscription.is_active = True
+        subscription.save()
+
+        messages.success(request, 'Subscription Activated successfully!')
         return redirect('client:dashboard')
 
     messages.error(request, 'Something went wrong!')

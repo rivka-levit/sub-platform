@@ -1,4 +1,4 @@
-<div class="modal fade" id="ActivateSubModalCenter" tabindex="-1" role="dialog" aria-labelledby="ActivateSubModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="activateSubModalCenter" tabindex="-1" role="dialog" aria-labelledby="activateSubModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header justify-content-sm-between">
@@ -10,7 +10,12 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <a type="button" class="btn btn-success" href="#">Activate</a>
+        <a type="button"
+           class="btn btn-success"
+           href="{% url 'client:activate_subscription' sub_id=user.subscription.paypal_subscription_id %}">
+
+          Activate
+        </a>
       </div>
     </div>
   </div>

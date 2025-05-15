@@ -83,20 +83,21 @@
           </form>
 
           <!-- Activate/Deactivate subscription button -->
-
           <form action="#" method="get" class="bnt-form">
             {% if user.subscription.is_active %}
-              <input type="submit"
-                   value="Deactivate"
-                   class="btn btn-warning mx-1"
-                   data-toggle="modal"
-                   data-target="#deactivateSubModalCenter">
-              {% include 'account/includes/deactivate_sub_modal.html' %}
+                <input type="button"
+                     value="Deactivate"
+                     class="btn btn-warning mx-1"
+                     data-toggle="modal"
+                     data-target="#deactivateSubModalCenter">
+                {% include 'account/includes/deactivate_sub_modal.html' %}
             {% else %}
-              <input type="submit"
-                   value="Activate"
-                   class="btn btn-success mx-1">
-              {% include 'account/includes/activate_sub_modal.html' %}
+                <input type="button"
+                     value="Activate"
+                     class="btn btn-success mx-1"
+                     data-toggle="modal"
+                     data-target="#activateSubModalCenter">
+                {% include 'account/includes/activate_sub_modal.html' %}
             {% endif %}
           </form>
 

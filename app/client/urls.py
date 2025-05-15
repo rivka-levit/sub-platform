@@ -48,4 +48,9 @@ urlpatterns = [
          views.deactivate_subscription,
          name='deactivate_subscription'
     ),
+    path(
+        'activate-subscription/<str:sub_id>/',
+        views.activate_subscription,
+        name='activate_subscription'
+    ),
 ]
