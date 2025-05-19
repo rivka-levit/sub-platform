@@ -10,6 +10,8 @@ from django.contrib.messages import get_messages
 
 from unittest.mock import patch, MagicMock
 
+from django.template.defaultfilters import title
+
 from client.models import Subscription
 
 pytestmark = pytest.mark.django_db
@@ -169,3 +171,26 @@ def test_delete_subscription_view_renders_correct_template(
     assert 'is_deleted' in r.context
     assert r.context['is_deleted'] is False
     assert 'Something went wrong!' in r.content.decode('utf-8')
+
+
+@pytest.mark.parametrize(
+    'sub_plan,articles_qty',
+    [('standard', 1), ('premium', 2)]
+)
+def test_browse_articles_standard_success(
+        sub_plan, articles_qty, client, sample_user, user_writer, article,
+        subscription, request
+):
+    """Test browse articles retrieves standard articles for standard subscription."""
+
+    plan = request.getfixturevalue(sub_plan)
+    subscription(user=sample_user, plan=plan)
+    article(user_writer)
+    article(user_writer, title='Premium Article', is_premium=True)
+    client.force_login(sample_user)
+
+    r = client.get(reverse('client:browse_articles'))
+
+    assert r.status_code == 200
+    assert 'articles' in r.context
+    assert len(r.context['articles']) == articles_qty
