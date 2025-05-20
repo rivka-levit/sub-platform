@@ -78,13 +78,14 @@ class BrowseArticlesView(LoginRequiredMixin, ListView):
         user = self.request.user
 
         if (not hasattr(user, 'subscription') or
-            not user.subscription or
+            not user.subscription or # noqa
             not user.subscription.is_active):  # noqa
 
             return None
 
         if user.subscription.subscription_plan.name == 'standard':  # noqa
             return self.queryset.filter(is_premium=False)
+
         return self.queryset
 
     def get_context_data(self, **kwargs):

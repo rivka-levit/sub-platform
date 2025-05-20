@@ -194,3 +194,18 @@ def test_browse_articles_standard_success(
     assert r.status_code == 200
     assert 'articles' in r.context
     assert len(r.context['articles']) == articles_qty
+
+
+def test_browse_no_articles_without_subscription(
+        client, sample_user, user_writer, article
+):
+    """Test browse articles retrieves no articles for user without subscription."""
+
+    article(user_writer)
+    client.force_login(sample_user)
+
+    r = client.get(reverse('client:browse_articles'))
+
+    assert r.status_code == 200
+    assert 'articles' in r.context
+    assert r.context['articles'] is None
