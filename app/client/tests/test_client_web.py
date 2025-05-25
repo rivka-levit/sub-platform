@@ -173,6 +173,33 @@ def test_delete_subscription_view_renders_correct_template(
     assert 'Something went wrong!' in r.content.decode('utf-8')
 
 
+@patch('client.views.cancel_subscription_paypal')
+def test_delete_subscription_success(
+        mocked_paypal,
+        client,
+        sample_user,
+        subscription,
+        standard
+):
+    """Test delete subscription successfully."""
+
+    sbn = subscription(user=sample_user, plan=standard)
+    client.force_login(sample_user)
+    mocked_paypal.return_value = True
+
+    r = client.get(reverse(
+        'client:delete_subscription',
+        kwargs={'subID': sbn.paypal_subscription_id})
+    )
+
+    assert r.status_code == 200
+    assert r.context['is_deleted'] == True
+
+    subscriptions = Subscription.objects.filter(user=sample_user)
+
+    assert subscriptions.exists() == False
+
+
 @pytest.mark.parametrize(
     'sub_plan,articles_qty',
     [('standard', 1), ('premium', 2)]
