@@ -8,9 +8,7 @@ import pytest
 from django.shortcuts import reverse
 from django.contrib.messages import get_messages
 
-from unittest.mock import patch, MagicMock
-
-from django.template.defaultfilters import title
+from unittest.mock import patch
 
 from client.models import Subscription
 
@@ -236,3 +234,25 @@ def test_browse_no_articles_without_subscription(
     assert r.status_code == 200
     assert 'articles' in r.context
     assert r.context['articles'] is None
+
+
+@patch('client.views.update_subscription_paypal')
+def test_update_subscription_view_success(
+        mocked_update, client, sample_user, subscription, standard
+):
+    """Test update subscription successfully."""
+
+    subscription(user=sample_user, plan=standard)
+    client.force_login(sample_user)
+    mocked_update.return_value = 'https://example.com'
+
+    r = client.get(reverse(
+        'client:update_subscription',
+        kwargs={'sub_id': sample_user.subscription.paypal_subscription_id}
+    ))
+
+    message_received = list(get_messages(r.wsgi_request))
+
+    assert r.status_code == 302
+    assert len(message_received) == 1
+    assert message_received[0].message == 'Subscription updated successfully!'
