@@ -237,14 +237,22 @@ def test_browse_no_articles_without_subscription(
 
 
 @patch('client.views.update_subscription_paypal')
+@pytest.mark.parametrize(
+    'approve_link,expected_message',
+    [
+        ('https://example.com', 'Subscription updated successfully!'),
+        (None, 'Something went wrong!')
+    ]
+)
 def test_update_subscription_view_success(
-        mocked_update, client, sample_user, subscription, standard
+        mocked_update, approve_link, expected_message, client, sample_user,
+        subscription, standard
 ):
     """Test update subscription successfully."""
 
     subscription(user=sample_user, plan=standard)
     client.force_login(sample_user)
-    mocked_update.return_value = 'https://example.com'
+    mocked_update.return_value = approve_link
 
     r = client.get(reverse(
         'client:update_subscription',
@@ -255,4 +263,4 @@ def test_update_subscription_view_success(
 
     assert r.status_code == 302
     assert len(message_received) == 1
-    assert message_received[0].message == 'Subscription updated successfully!'
+    assert message_received[0].message == expected_message

@@ -185,7 +185,6 @@ class DeleteSubscriptionView(TemplateView):
 class UpdateSubscriptionView(RedirectView):
     login_url = 'login'
     redirect_field_name = 'redirect_to'
-    pattern_name = 'account'
 
     @method_decorator(login_required(
         login_url='login',
@@ -210,7 +209,7 @@ class UpdateSubscriptionView(RedirectView):
             return approve_link
 
         messages.error(self.request, 'Something went wrong!')
-        return super().get_redirect_url(*args, **kwargs)
+        return reverse('account')
 
 
 class PayPalSubConfirmedView(LoginRequiredMixin, TemplateView):
