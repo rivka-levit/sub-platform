@@ -264,3 +264,18 @@ def test_update_subscription_view_success(
     assert r.status_code == 302
     assert len(message_received) == 1
     assert message_received[0].message == expected_message
+
+
+def test_paypal_update_confirmed_page(
+        client, sample_user, subscription, standard
+):
+    """Test retrieving PayPal update confirmed page successfully."""
+
+    sbn = subscription(user=sample_user, plan=standard)
+    client.force_login(sample_user)
+
+    r = client.get(reverse('client:paypal_subscription_confirmed'))
+
+    assert r.status_code == 200
+    assert r.context['title'] == 'PayPal Confirmed Subscription'
+    assert r.context['subID'] == sbn.paypal_subscription_id
