@@ -279,3 +279,28 @@ def test_paypal_update_confirmed_page(
     assert r.status_code == 200
     assert r.context['title'] == 'PayPal Confirmed Subscription'
     assert r.context['subID'] == sbn.paypal_subscription_id
+
+
+@patch('client.views.get_current_subscription_plan')
+@patch('client.views.get_access_token')
+def test_django_update_confirmed_page(
+        mocked_access_token, mocked_plan, client, sample_user,
+        subscription, standard, premium
+):
+    """Test Django update confirmed page success."""
+
+    sbn = subscription(user=sample_user, plan=standard)
+    mocked_plan.return_value = premium.paypal_plan_id
+    client.force_login(sample_user)
+
+    r = client.get(reverse(
+        'client:django_subscription_confirmed',
+        kwargs={'subID': sample_user.subscription.paypal_subscription_id}
+    ))
+
+    sbn.refresh_from_db()
+
+    assert r.status_code == 200
+    assert r.context['title'] == 'Subscription Confirmed'
+    assert sbn.subscription_plan == premium
+    assert r.context['subPlan'] == premium
