@@ -172,7 +172,9 @@ def test_delete_subscription_view_renders_correct_template(
 
 
 @patch('client.views.cancel_subscription_paypal')
+@patch('client.views.get_access_token')
 def test_delete_subscription_success(
+        mocked_access_token,
         mocked_paypal,
         client,
         sample_user,
@@ -304,3 +306,34 @@ def test_django_update_confirmed_page(
     assert r.context['title'] == 'Subscription Confirmed'
     assert sbn.subscription_plan == premium
     assert r.context['subPlan'] == premium
+
+
+@patch('client.views.deactivate_subscription_paypal')
+@patch('client.views.get_access_token')
+@pytest.mark.parametrize(
+    'code,message',
+    [
+        (204, 'Subscription deactivated successfully!'),
+        (500, 'Something went wrong!')
+    ]
+)
+def test_deactivate_subscription_success(
+        mocked_access_token, mocked_paypal_response, code, message, client,
+        sample_user, subscription, standard
+):
+    """Test deactivating subscription successfully."""
+
+    subscription(user=sample_user, plan=standard)
+    client.force_login(sample_user)
+    mocked_paypal_response.return_value = code
+
+    r = client.get(reverse(
+        'client:deactivate_subscription',
+        kwargs={'sub_id': sample_user.subscription.paypal_subscription_id}
+    ))
+
+    message_received = list(get_messages(r.wsgi_request))
+
+    assert r.status_code == 302
+    assert len(message_received) == 1
+    assert message_received[0].message == message
