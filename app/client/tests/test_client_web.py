@@ -147,6 +147,25 @@ def test_duplicated_create_subscription_fails(client, sample_user, standard, pre
     assert 'Subscription not created!' in message_received[0].message
 
 
+@patch('client.views.Subscription.objects')
+def test_create_subscription_with_error_fails(
+    mocked_sbn_manager, client, sample_user, standard
+):
+    """Test creating subscription with another error fails."""
+
+    mocked_sbn_manager.create.side_effect = ValueError()
+    client.force_login(sample_user)
+    sub_id = 'I-FF84TRR0J08'
+    plan_name = standard.name
+    r = client.get(f'{reverse('client:create_subscription')}?subID={sub_id}&plan={plan_name}')
+    message_received = list(get_messages(r.wsgi_request))
+
+    assert r.status_code == 302
+    assert len(message_received) == 1
+    assert message_received[0].level == 40
+    assert 'Something went wrong!' in message_received[0].message
+
+
 def test_delete_subscription_view_renders_correct_template(
         client,
         sample_user,
