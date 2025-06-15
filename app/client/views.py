@@ -318,7 +318,7 @@ def activate_subscription(request, sub_id):
         subscription.is_active = True
         subscription.save()
 
-        messages.success(request, 'Subscription Activated successfully!')
+        messages.success(request, 'Subscription activated successfully!')
         return redirect('client:dashboard')
 
     messages.error(request, 'Something went wrong!')
