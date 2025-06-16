@@ -45,6 +45,16 @@ def test_writer_not_authenticated_redirect(client, user_writer):
                                         kwargs={'writer_id': user_writer.id})}')
 
 
+def test_writer_redirect_to_client(client, sample_user):
+    """Test client is redirected to client dashboard on requesting writer dashboard."""
+
+    client.force_login(sample_user)
+    r = client.get(reverse('writer:dashboard', kwargs={'writer_id': sample_user.id}))
+
+    assert r.status_code == 302
+    assert r['Location'] == f'{reverse('client:dashboard')}'
+
+
 def test_create_article_has_protected_form(client, user_writer):
     client.force_login(user_writer)
 
