@@ -11,6 +11,8 @@ The platform supports standard and premium subscription tiers, offering
 varying levels of access to content. It is designed for scalability and ease 
 of deployment using Docker.
 
+<br>
+
 ### 🚀 Features
 
 - 🔐 User Registration & Authentication
@@ -31,12 +33,16 @@ of deployment using Docker.
 
 - 🐳 Dockerized Deployment
 
+<br>
+
 ### 🏗️ Tech Stack
 
 - Backend: Django 4.x
 - Database: PostgreSQL (via Docker)
 - Authentication: Custom model based on Django built-in auth system
 - Containerization: Docker & Docker Compose
+
+<br>
 
 ### 🐳 Getting Started with Docker
 
@@ -61,27 +67,35 @@ of deployment using Docker.
     docker-compose up --build
    ```
 
+<br>
+
 ### 🧪 Running Tests
 
 ```
 docker compose run --rm app sh -c "pytest"
 ```
 
+<br>
+
 ### 💡 Subscription Plans
 
-| Plan       | Access Level           |
-|------------|------------------------|
-| Standard   | Limited article access |
-| Premium    | Full article access    |
+| Plan      | Access Level           |
+|-----------|------------------------|
+| Standard  | Limited article access |
+| Premium   | Full article access    |
 
 Access logic is enforced in views and templates based on the client's current 
 subscription status.
+
+<br>
 
 ### 🔐 Authentication
 
 - Users can register as either writer or client.
 - The role determines the dashboard and available features.
 - Permissions and access control are managed via Django’s CustomUser model and custom decorators/mixins.
+
+<br>
 
 ### 🙌 Acknowledgments
 
